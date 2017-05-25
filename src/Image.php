@@ -9,7 +9,6 @@
  */
 namespace Naucon\Image;
 
-use Naucon\Image\ImageWriter;
 use Naucon\Image\Exception\ImageException;
 
 /**
@@ -78,7 +77,7 @@ class Image
     }
 
     /**
-     * @param       string                  file extension of image format
+     * @param       string      $format     file extension of image format
      * @return      bool                    is supported format
      */
     public function isSupportedFormat($format)
@@ -117,9 +116,10 @@ class Image
     /**
      * create new image
      *
-     * @param       int             image width
-     * @param       int             image height
+     * @param       int     $width      image width
+     * @param       int     $height     image height
      * @return      ImageWriter
+     * @throws      ImageException
      */
     public function create($width, $height)
     {
@@ -133,14 +133,14 @@ class Image
         } else {
             throw new ImageException('Image width and height must be greater than 0.');
         }
-        return false;
     }
 
     /**
      * create image from a image data string
      *
-     * @param       string              image data string
+     * @param       string      $string         image data string
      * @return      ImageWriter
+     * @throws      ImageException
      */
     static public function load($string)
     {
@@ -158,14 +158,14 @@ class Image
         } else {
             throw new ImageException('Given image data are empty.');
         }
-        return false;
     }
 
     /**
      * create image from a given image file
      *
-     * @param       string|\SplFileInfo
-     * @return      ImageWriter
+     * @param       string|\SplFileInfo     $pathname
+     * @return      ImageWriter|bool
+     * @throws      ImageException
      */
     public function open($pathname)
     {
@@ -175,7 +175,6 @@ class Image
             $fileInfo = new \SplFileInfo($pathname);
         }
 
-        $imageWriter = false;
         if ($fileInfo->isReadable()) {
             switch (strtolower($fileInfo->getExtension())) {
                 case 'jpe':

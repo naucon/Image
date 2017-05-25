@@ -33,7 +33,8 @@ class ImageWriter
     /**
      * Constructor
      *
-     * @param       resource                    image resource
+     * @param       resource        $imageResource      image resource
+     * @throws      ImageWriterException
      */
     public function __construct($imageResource)
     {
@@ -57,7 +58,7 @@ class ImageWriter
 
     /**
      * @access      protected
-     * @param       resource    image resource
+     * @param       resource        $imageResource      image resource
      * @return      bool
      */
     protected function isImageResource($imageResource)
@@ -105,10 +106,10 @@ class ImageWriter
     }
 
     /**
-     * @param       int            red 0-255
-     * @param       int            green 0-255
-     * @param       int            blue 0-255
-     * @return      int            internal color index
+     * @param       int     $red        red 0-255
+     * @param       int     $green      green 0-255
+     * @param       int     $blue       blue 0-255
+     * @return      int                 internal color index
      */
     public function getColorIndex($red, $green, $blue)
     {
@@ -120,9 +121,9 @@ class ImageWriter
     }
 
     /**
-     * @param       int             red 0-255
-     * @param       int             green 0-255
-     * @param       int             blue 0-255
+     * @param       int     $red        red 0-255
+     * @param       int     $green      green 0-255
+     * @param       int     $blue       blue 0-255
      * @return      bool
      */
     public function hasColor($red, $green, $blue)
@@ -139,10 +140,10 @@ class ImageWriter
     }
 
     /**
-     * @param       int             red 0-255
-     * @param       int             green 0-255
-     * @param       int             blue 0-255
-     * @return      int             internal color index
+     * @param       int     $red        red 0-255
+     * @param       int     $green      green 0-255
+     * @param       int     $blue       blue 0-255
+     * @return      int                 internal color index
      */
     public function getClosestColorIndex($red, $green, $blue)
     {
@@ -154,10 +155,11 @@ class ImageWriter
     }
 
     /**
-     * @param       int             red 0-255
-     * @param       int             green 0-255
-     * @param       int             blue 0-255
+     * @param       int     $red        red 0-255
+     * @param       int     $green      green 0-255
+     * @param       int     $blue       blue 0-255
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function transparentColor($red, $green, $blue)
     {
@@ -177,6 +179,7 @@ class ImageWriter
      * reverses all colors of the image
      *
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function negative()
     {
@@ -192,6 +195,7 @@ class ImageWriter
      * converts colors to grayscale
      *
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function grayscale()
     {
@@ -206,8 +210,9 @@ class ImageWriter
     /**
      * changes brightness of the image
      *
-     * @param       int            brightness -255 to +255
+     * @param       int     $value      brightness -255 to +255
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function brightness($value)
     {
@@ -222,8 +227,9 @@ class ImageWriter
     /**
      * change contrast of the image
      *
-     * @param       int            contrast -100 to +100
+     * @param       int     $value      contrast -100 to +100
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function contrast($value)
     {
@@ -238,9 +244,10 @@ class ImageWriter
     /**
      * gamma correction
      *
-     * @param       float          gamma input
-     * @param       float          gamma output
+     * @param       float       $inputgamma         gamma input
+     * @param       float       $outputgamma        gamma output
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function gamma($inputgamma, $outputgamma)
     {
@@ -255,13 +262,14 @@ class ImageWriter
     /**
      * colorize image to a specific color
      *
-     * @param       int             red 0-255
-     * @param       int             green 0-255
-     * @param       int             blue 0-255
-     * @param       int             alpha channel 0-127
+     * @param       int     $red        red 0-255
+     * @param       int     $green      green 0-255
+     * @param       int     $blue       blue 0-255
+     * @param       int     $alpha      alpha channel 0-127
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
-    public function colorize($red, $green, $blue, $alpha=0)
+    public function colorize($red, $green, $blue, $alpha = 0)
     {
         if (!is_null($this->imageResource)) {
             if (!imagefilter($this->imageResource, IMG_FILTER_COLORIZE, (int)$red, (int)$green, (int)$blue, (int)$alpha)) {
@@ -275,6 +283,7 @@ class ImageWriter
      * highlight/outline the edges
      *
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function outline()
     {
@@ -290,6 +299,7 @@ class ImageWriter
      * embosses the image
      *
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function emboss()
     {
@@ -305,6 +315,7 @@ class ImageWriter
      * blurs the image
      *
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function blur()
     {
@@ -321,6 +332,7 @@ class ImageWriter
      * blurs the image using the gaussian method
      *
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function blurGaussian()
     {
@@ -336,6 +348,7 @@ class ImageWriter
      * blurs the image using the gaussian method
      *
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function sharpen()
     {
@@ -357,6 +370,7 @@ class ImageWriter
      * sketchy effect (mean removal)
      *
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function sketchy()
     {
@@ -371,8 +385,9 @@ class ImageWriter
     /**
      * makes the image smoother
      *
-     * @param       int             smoothness level
+     * @param       int     $value      smoothness level
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
     public function smooth($value)
     {
@@ -387,11 +402,12 @@ class ImageWriter
     /**
      * applies pixelation effect to the image
      *
-     * @param       int             block size
-     * @param       bool            advanced pixelation effect (default is false)
+     * @param       int     $blockSize      block size
+     * @param       bool    $advanced       advanced pixelation effect (default is false)
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
-    public function pixelation($blockSize, $advanced=false)
+    public function pixelation($blockSize, $advanced = false)
     {
         if (!is_null($this->imageResource)) {
             if (!imagefilter($this->imageResource, IMG_FILTER_PIXELATE, (int)$blockSize, (bool)$advanced)) {
@@ -404,10 +420,11 @@ class ImageWriter
     /**
      * specify alpha blending mode
      *
-     * @param       bool            Alpha blending true or false
+     * @param       bool        $enable     Alpha blending true or false
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
-    public function alphaBlending($enable=true)
+    public function alphaBlending($enable = true)
     {
         if (!is_null($this->imageResource)) {
             if (!imagealphablending($this->imageResource, (bool)$enable)) {
@@ -420,10 +437,11 @@ class ImageWriter
     /**
      * specify anti aliasing
      *
-     * @param       bool            Antialiasing true or false
+     * @param       bool        $enable     Antialiasing true or false
      * @return      ImageWriter
+     * @throws      ImageWriterException
      */
-    public function antialiase($enable=true)
+    public function antialiase($enable = true)
     {
         if (!is_null($this->imageResource)) {
             if (!imageantialias($this->imageResource, (bool)$enable)) {
@@ -446,7 +464,7 @@ class ImageWriter
     /**
      * image quality (for Jpeg)
      *
-     * @param       int            image quality 0-100
+     * @param       int     $quality        image quality 0-100
      * @return      ImageWriter
      */
     public function setQuality($quality)
@@ -455,126 +473,126 @@ class ImageWriter
         return $this;
     }
 
-    /**
-     * @param    resource    image resource
-     * @return    void
-     */
-    /*	public function setRectangle()
-        {
-            if ( $this->isImageResource($resource) )
-            {
-            return imagefilledrectangle($imageResource, $outerPositionX, $outerPositionY, $innerPositionX, $innerPositionY, $colorIndex);
-            }
-        }*/
+//    /**
+//     * @param    resource    image resource
+//     * @return    void
+//     */
+//    public function setRectangle()
+//    {
+//        if ( $this->isImageResource($resource) )
+//        {
+//        return imagefilledrectangle($imageResource, $outerPositionX, $outerPositionY, $innerPositionX, $innerPositionY, $colorIndex);
+//        }
+//    }
 
-    /**
-     * @param    resource    image resource
-     * @return    void
-     */
-    /*public function setLine()
-    {
-        if ( $this->isImageResource($resource) )
-        {
-            return imageline($imageResource, $startPositionX, $startPositionY, $endPositionX, $endPositionY, $colorIndex);
-        }
-    }*/
+//    /**
+//     * @param    resource    image resource
+//     * @return    void
+//     */
+//    public function setLine()
+//    {
+//        if ( $this->isImageResource($resource) )
+//        {
+//            return imageline($imageResource, $startPositionX, $startPositionY, $endPositionX, $endPositionY, $colorIndex);
+//        }
+//    }
 
-    /**
-     * @access    private
-     * @param    resource    image resource
-     * @return bool
-     */
-    /*public function setPolygon()
-    {
-        if ( $this->isImageResource($resource) )
-        {
-            // $positoins enthält als Value abwechseln x und y coordinaten
-            return imagefilledpolygon($imageResource, $positions=array(), $vertices=3, $colorIndex);
-        }
-    }*/
+//    /**
+//     * @access    private
+//     * @param    resource    image resource
+//     * @return bool
+//     */
+//    public function setPolygon()
+//    {
+//        if ( $this->isImageResource($resource) )
+//        {
+//            // $positoins enthält als Value abwechseln x und y coordinaten
+//            return imagefilledpolygon($imageResource, $positions=array(), $vertices=3, $colorIndex);
+//        }
+//    }
 
-    /**
-     * @access    private
-     * @param    resource    image resource
-     * @return bool
-     */
-    /*public function setEllipse()
-    {
-        if ( $this->isImageResource($resource) )
-        {
-            return imagefilledellipse($imageResource, $centerPositionX, $centerPositionY, $imageWidth, $imageHeight, $colorIndex);
-        }
-    }*/
+//    /**
+//     * @access    private
+//     * @param    resource    image resource
+//     * @return bool
+//     */
+//    public function setEllipse()
+//    {
+//        if ( $this->isImageResource($resource) )
+//        {
+//            return imagefilledellipse($imageResource, $centerPositionX, $centerPositionY, $imageWidth, $imageHeight, $colorIndex);
+//        }
+//    }
 
-    /**
-     * @param    string        text
-     * @return    string
-     */
-    /*public function setText($text)
-    {
-        $fontsize = 12; // GD1 in px or GD2 in pt
-        $angle = 0;
-        $fontfile = '';	// font path
-        $options = array('linespacing' => 0);
+//    /**
+//     * @param    string     $text        text
+//     * @return    string
+//     */
+//    public function setText($text)
+//    {
+//        $fontsize = 12; // GD1 in px or GD2 in pt
+//        $angle = 0;
+//        $fontfile = '';	// font path
+//        $options = array('linespacing' => 0);
+//
+//        list($lowerLeftCornerX,$lowerLeftCornerY,$lowerRightCornerX,$lowerRightCornerY,$upperRightCornerX,$upperRightCornerY,$upperLeftCornerX,$upperLeftCornerY) = imageftbbox($fontsize,$angle,$fontfile,$text,$options);
+//    }
 
-        list($lowerLeftCornerX,$lowerLeftCornerY,$lowerRightCornerX,$lowerRightCornerY,$upperRightCornerX,$upperRightCornerY,$upperLeftCornerX,$upperLeftCornerY) = imageftbbox($fontsize,$angle,$fontfile,$text,$options);
-    }*/
+//    /**
+//     * @param    string     $text        text
+//     * @return    string
+//     */
+//    public function setText($text)
+//    {
+//        $fontsize = 12; // GD1 in px or GD2 in pt
+//        $angle = 0;
+//        $fontfile = '';	// font path
+//        $options = array('linespacing' => 0);
+//
+//        imagefttext($imageResource, $fontsize, $angle, $positionX, $positionY, $fontfile, $text, $options);
+//    }
 
-    /**
-     * @param    string        text
-     * @return    string
-     */
-    /*public function setText($text)
-    {
-        $fontsize = 12; // GD1 in px or GD2 in pt
-        $angle = 0;
-        $fontfile = '';	// font path
-        $options = array('linespacing' => 0);
+//    /**
+//     * @param    resource    source image resource
+//     * @param    int            source image position x
+//     * @param    int            source image position y
+//     * @param    resource    optional target image resource
+//     * @param    int            optional target image position x
+//     * @param    int            optional target image position y
+//     * @return    resource
+//     */
+//    public function copy()
+//    {
+//        imagecopy($imageScaledResource, $imageResource, 0, 0, 0, 0);
+//        // $transparency = 0-100 Übergang
+//        imagecopymerge($imageScaledResource, $imageResource, 0, 0, 0, 0, $transparency);
+//        // 0,0,0,0 = position destination x und y sowie source x und y
+//        imagecopyresampled($imageScaledResource, $imageResource, 0, 0, 0, 0, $newImageWidth, $newImageHeight, $imageWidth, $imageHeight );
+//    }
 
-        imagefttext($imageResource, $fontsize, $angle, $positionX, $positionY, $fontfile, $text, $options);
-    }*/
-
-    /**
-     * @param    resource    source image resource
-     * @param    int            source image position x
-     * @param    int            source image position y
-     * @param    resource    optional target image resource
-     * @param    int            optional target image position x
-     * @param    int            optional target image position y
-     * @return    resource
-     */
-    /*public function copy()
-    {
-        imagecopy($imageScaledResource, $imageResource, 0, 0, 0, 0);
-        // $transparency = 0-100 Übergang
-        imagecopymerge($imageScaledResource, $imageResource, 0, 0, 0, 0, $transparency);
-        // 0,0,0,0 = position destination x und y sowie source x und y
-        imagecopyresampled($imageScaledResource, $imageResource, 0, 0, 0, 0, $newImageWidth, $newImageHeight, $imageWidth, $imageHeight );
-    }*/
-
-    /**
-     * @param    resource    source image resource
-     * @param    int            source image position x
-     * @param    int            source image position y
-     * @param    resource    optional target image resource
-     * @param    int            optional target image position x
-     * @param    int            optional target image position y
-     * @return    resource
-     */
-    /*public function crop()
-    {
-        imagecopy($imageScaledResource, $imageResource, 0, 0, 0, 0);
-        // $transparency = 0-100 Übergang
-        imagecopymerge($imageScaledResource, $imageResource, 0, 0, 0, 0, $transparency);
-        // 0,0,0,0 = position destination x und y sowie source x und y
-        imagecopyresampled($imageScaledResource, $imageResource, 0, 0, 0, 0, $newImageWidth, $newImageHeight, $imageWidth, $imageHeight );
-    }*/
+//    /**
+//     * @param    resource    source image resource
+//     * @param    int            source image position x
+//     * @param    int            source image position y
+//     * @param    resource    optional target image resource
+//     * @param    int            optional target image position x
+//     * @param    int            optional target image position y
+//     * @return    resource
+//     */
+//    public function crop()
+//    {
+//        imagecopy($imageScaledResource, $imageResource, 0, 0, 0, 0);
+//        // $transparency = 0-100 Übergang
+//        imagecopymerge($imageScaledResource, $imageResource, 0, 0, 0, 0, $transparency);
+//        // 0,0,0,0 = position destination x und y sowie source x und y
+//        imagecopyresampled($imageScaledResource, $imageResource, 0, 0, 0, 0, $newImageWidth, $newImageHeight, $imageWidth, $imageHeight );
+//    }
 
     /**
      * scale image
      *
-     * @param       int             width in px
-     * @param       int             height in px
+     * @param       int     $width      width in px
+     * @param       int     $height     height in px
      * @return      ImageWriter
      */
     public function scale($width, $height)
@@ -614,8 +632,9 @@ class ImageWriter
     /**
      * save image
      *
-     * @param       string|\SplFileInfo
+     * @param       string|\SplFileInfo     $pathname
      * @return      bool
+     * @throws      ImageWriterException
      */
     public function save($pathname)
     {
@@ -653,10 +672,11 @@ class ImageWriter
     /**
      * dump image
      *
-     * @param       string          file type
+     * @param       string      $type       file type
      * @return      bool
+     * @throws      ImageWriterException
      */
-    public function dump($type='png')
+    public function dump($type = 'png')
     {
         if (!is_null($this->imageResource)) {
             $result = false;
